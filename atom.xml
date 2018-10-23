@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-10-23T06:12:24.248Z</updated>
+  <updated>2018-10-23T07:04:04.155Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,11 +17,35 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>解决Hexo部署到git报错问题</title>
+    <link href="http://yoursite.com/2018/10/23/%E8%A7%A3%E5%86%B3Hexo%E9%83%A8%E7%BD%B2%E5%88%B0git%E6%8A%A5%E9%94%99%E9%97%AE%E9%A2%98/"/>
+    <id>http://yoursite.com/2018/10/23/解决Hexo部署到git报错问题/</id>
+    <published>2018-10-23T06:46:20.000Z</published>
+    <updated>2018-10-23T07:04:04.155Z</updated>
+    
+    <content type="html"><![CDATA[<p>使用hexo deploy自动部署到github page的时候出现如下错误：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fatal: could not read Username for &apos;https://github.com&apos;: Invalid argument</span><br></pre></td></tr></table></figure><p>具体解决方法如下：</p><a id="more"></a><h3 id="Hexo配置"><a href="#Hexo配置" class="headerlink" title="Hexo配置"></a>Hexo配置</h3><p>要使用自动部署首先要安装hexo-deployer-git工具：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure><p>配置_config.yml中的deploy：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:your_github_user_name/your_github_user_name.github.io.git</span><br><span class="line">  branch: master</span><br><span class="line">  message: 提交信息</span><br></pre></td></tr></table></figure><h3 id="生成ssh-key"><a href="#生成ssh-key" class="headerlink" title="生成ssh key"></a>生成ssh key</h3><p>命令行输入：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C greenovia@qq.com（换成你的邮箱地址）</span><br></pre></td></tr></table></figure><p>接着出现的一些步骤都可以回车跳过，如下： </p><p><img src="/images/sshKey.jpg" alt="sshKey"></p><h3 id="配置github账号的ssh-key"><a href="#配置github账号的ssh-key" class="headerlink" title="配置github账号的ssh key"></a>配置github账号的ssh key</h3><p>打开id_rsa.pub文件将一整串公钥拷贝下来</p><p>进入你的github账户设置，在ssh and GPG keys中新增一个ssh key</p><p>验证ssh key：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure><p>出现下面的语句说明你的ssh key已经配置好了</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hi wispyoureyes! You&apos;ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure><h3 id="初始化本地仓库"><a href="#初始化本地仓库" class="headerlink" title="初始化本地仓库"></a>初始化本地仓库</h3><p>设置Git的user name和email：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name &quot;wuyanqina&quot;</span><br><span class="line">$ git config --global user.email &quot;greenovia@qq.com&quot;（换成你的邮箱地址）</span><br></pre></td></tr></table></figure><p>在本地的hexo init生成的文件夹中初始化git仓库：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git init</span><br></pre></td></tr></table></figure><p>将本地仓库和远程仓库连接（这一步骤可以不做）：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add origin git@github.com:your_github_user_name/your_github_user_name.github.io.git(远程仓库ssh地址)</span><br></pre></td></tr></table></figure><p>做完以上这些步骤，说明你的仓库可以使用ssh方式来上传下载代码，而不需要输入用户名和密码了</p><h3 id="网站部署"><a href="#网站部署" class="headerlink" title="网站部署"></a>网站部署</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure><p>这样你的博客就部署到了page上了~</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;使用hexo deploy自动部署到github page的时候出现如下错误：&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;fatal: could not read Username for &amp;apos;https://github.com&amp;apos;: Invalid argument&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;具体解决方法如下：&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="博客建站" scheme="http://yoursite.com/categories/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E7%AB%99/"/>
+    
+    
+      <category term="Hexo" scheme="http://yoursite.com/tags/Hexo/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Hexo常用操作</title>
     <link href="http://yoursite.com/2018/01/26/Hexo%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/"/>
     <id>http://yoursite.com/2018/01/26/Hexo常用操作/</id>
     <published>2018-01-26T08:24:38.000Z</published>
-    <updated>2018-10-23T06:12:24.248Z</updated>
+    <updated>2018-10-23T06:47:24.237Z</updated>
     
     <content type="html"><![CDATA[<blockquote><p>Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。</p></blockquote><a id="more"></a><p>安装Hexo前要先安装Node.js和Git，具体安装请各自百度。</p><h3 id="Hexo安装"><a href="#Hexo安装" class="headerlink" title="Hexo安装"></a>Hexo安装</h3><pre><code>npm install -g hexo-cli</code></pre><h3 id="建站"><a href="#建站" class="headerlink" title="建站"></a>建站</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init &lt;folder&gt;(不写默认在当前目录)</span><br><span class="line">cd &lt;folder&gt;</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure><h3 id="建站完成后目录结构"><a href="#建站完成后目录结构" class="headerlink" title="建站完成后目录结构"></a>建站完成后目录结构</h3><pre><code>├── _config.yml(网站的配置信息)├── package.json(应用程序的信息)├── scaffolds(模板文件夹)├── source(资源文件夹)|   ├── _drafts(草稿文件夹)|   └── _posts(文章文件夹)└── themes(Hexo主题)</code></pre><h3 id="新建文章"><a href="#新建文章" class="headerlink" title="新建文章"></a>新建文章</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hexo new [layout] &lt;title&gt;</span><br><span class="line">布局路径</span><br><span class="line">postsource/_posts</span><br><span class="line">pagesource</span><br><span class="line">draftsource/_drafts</span><br></pre></td></tr></table></figure><p>layout对应于scaffolds文件夹中布局文件;默认取_config.yml中的default_layout</p><h3 id="Hexo服务器安装"><a href="#Hexo服务器安装" class="headerlink" title="Hexo服务器安装"></a>Hexo服务器安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-server --save</span><br></pre></td></tr></table></figure><h3 id="启动服务器"><a href="#启动服务器" class="headerlink" title="启动服务器"></a>启动服务器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo server(默认4000)或hexo server -p 5000(指定端口)</span><br><span class="line">hexo s --debug</span><br></pre></td></tr></table></figure><h3 id="生成静态文件并部署网站"><a href="#生成静态文件并部署网站" class="headerlink" title="生成静态文件并部署网站"></a>生成静态文件并部署网站</h3><pre><code>hexo generate --deploy简写：hexo g -d</code></pre><h3 id="git配置"><a href="#git配置" class="headerlink" title="git配置"></a>git配置</h3><pre><code>安装 hexo-deployer-git。$ npm install hexo-deployer-git --savedeploy:    type: git    repo: &lt;repository url&gt;    branch: [branch]    message: [message] //提交信息</code></pre><h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">Hexo中文文档</a></p>]]></content>
     
@@ -32,6 +56,8 @@
 &lt;/blockquote&gt;
     
     </summary>
+    
+      <category term="博客建站" scheme="http://yoursite.com/categories/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E7%AB%99/"/>
     
     
       <category term="博客建站" scheme="http://yoursite.com/tags/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E7%AB%99/"/>
