@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[Hexo常用操作]]></title>
+    <url>%2F2018%2F01%2F26%2FHexo%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%2F</url>
+    <content type="text"><![CDATA[Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。 安装Hexo前要先安装Node.js和Git，具体安装请各自百度。 Hexo安装npm install -g hexo-cli 建站123hexo init &lt;folder&gt;(不写默认在当前目录)cd &lt;folder&gt;npm install 建站完成后目录结构├── _config.yml(网站的配置信息) ├── package.json(应用程序的信息) ├── scaffolds(模板文件夹) ├── source(资源文件夹) | ├── _drafts(草稿文件夹) | └── _posts(文章文件夹) └── themes(Hexo主题) 新建文章12345hexo new [layout] &lt;title&gt;布局 路径post source/_postspage sourcedraft source/_drafts layout对应于scaffolds文件夹中布局文件;默认取_config.yml中的default_layout Hexo服务器安装1npm install hexo-server --save 启动服务器12hexo server(默认4000)或hexo server -p 5000(指定端口)hexo s --debug 生成静态文件并部署网站hexo generate --deploy 简写：hexo g -d git配置安装 hexo-deployer-git。 $ npm install hexo-deployer-git --save deploy: type: git repo: &lt;repository url&gt; branch: [branch] message: [message] //提交信息 参考资料Hexo中文文档]]></content>
+      <tags>
+        <tag>博客建站</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[NXOpen包装ufunc]]></title>
+    <url>%2F2017%2F08%2F05%2FNXOpen%E5%8C%85%E8%A3%85ufunc%2F</url>
+    <content type="text"><![CDATA[NXOpen是一个应用程序编程接口（API）工具包的集合，它允许通过开放的体系结构灵活地集成定制NX应用程序。其目的是使复杂和重复的任务自动化。此外，还允许集成不同的应用程序，以及第三方和NX应用程序，在不同的计算机平台上共享数据，从不同的位置使用异构网络，甚至跨Internet。NXOpen API提供了一个开放的体系结构，可以由第三方、客户和内部用户利用它们来创建和集成定制软件应用程序。NXOpen主要是指NX的common API。 ufunc(Open C)发展了很多年，包含5000多个函数，功能覆盖方方面面。Common API通过生成.NET、Java和Python的包装类来保证能使用这些函数。 一些OpenC函数没有包装类，详情参见列表Non-NXOpen functionsOpenC模块及函数映射到NXOpen详见命名约定 Common API将对象表示为典型的面向对象对象，而OpenC则将它们表示为标记(Tag)。下面的示例说明如何在对象和标记之间切换。 在使用包装类前要理解一些简单的概念： 名称空间和模块结构.NET NXOpen 包装类定义在NXOpen.UF命名空间。Java包装类在NXOpenUF.jar中，定义在nxopen.uf包。Python包装类包含在NXOpen_UF.pvd扩展模块，定义在NXOpen.UF模块。 UFSession获得包装类之前你首先要获得UFSession的实例。包装类(与ufunc模块对应)定义在UFSession的方法中。例如：UFSession的curve()方法返回一个UFCurve类的实例。 TaggedObjectManager and NXObjectManagerTaggedObjectManager是定义在nxopen包里面的一个NXOpen Java接口。使用该类的get方法获取与标签对应的NXOpen Tag对象。.NET、Python对应的类分别为TaggedObjectManager、NXObjectManager。 Tag属性所有的NXOpen标签对象在.NET和Python中都有一个Tag属性，在Java和c++中有一个tag()方法。 包装类-具体实例1.NXopen .NET下面的例子使用ufunc API生成一个圆弧并用NXOpen.NET API查询圆弧数据：1234567891011121314151617Dim theSession As Session = Session.GetSession() Dim theUFSession As UFSession = UFSession.GetUFSession() &apos; Create an ARC using the Open API Tag arc;Dim arc_coords As UFCurve.Arcarc_coords.radius = 1.0arc_coords.arc_center = New Double()&#123;1.0, 1.0, 0.0&#125;arc_coords.start_angle = 0.0arc_coords.end_angle = Math.PIarc_coords.matrix_tag = theSession.Parts.Display.WCS.CoordinateSystem.Orientation.TagtheUFSession.Curve.CreateArc( arc_coords, arc)&apos; Get the Arc Object to use with NX Open NXOpen.Arc nxArc= CType(NXOpen.Utilities.NXObjectManager.Get(arc), NXOpen.Arc)&apos;Get the Arc parameters using NX Open APIsDim start_angle As Double = nxArc.StartAngle Dim end_angle As Double = nxArc.EndAngle Dim arc_center As NXOpen.Point3d = nxArc.CenterPoint 2.NXOpen JAVA下面的例子使用ufunc API生成一个圆弧并用NXOpenJava API查询圆弧数据：12345678910111213141516171819202122Session theSession = (Session)SessionFactory.get(&quot;Session&quot;);UFSession theUFSession = (UFSession)SessionFactory.get(&quot;UFSession&quot;);/* Create Arc using Open C API wrapper */UFCurve ufCurve = theUFSession.curve();UFCurve.Arc ufArc = new UFCurve.Arc();UFCsys ufCsys = theUFSession.csys();/* Fill out the data structure */ufArc.startAngle = 0.0;ufArc.endAngle = 3.0;ufArc.arcCenter=new double[3];ufArc.arcCenter[0] = 0.0;ufArc.arcCenter[1] = 0.0;ufArc.arcCenter[2] = 1.0;ufArc.radius = 2.0;/* Create Arc */Tag wcsData = ufCsys.askWcs();ufArc.matrixTag = ufCsys.askMatrixOfObject(wcsData);Tag arcTag = ufCurve.createArc(ufArc);/* Get the Arc Object to use with NX Open*/Arc arc = (Arc)theSession.taggedObjectManager().get(arc2Tag);/* Get arc parameters using NX Open Java APIs */double start_angle = arc.startAngle(); 3.NXOpen Python下面的例子使用ufunc API生成一个圆弧并用NXOpenPython API查询圆弧数据：1234567891011121314151617theSession = NXOpen.Session.GetSession() theUFSession = NXOpen.UF.UFSession.GetUFSession() # Create an ARC using the Open API arc_coords = NXOpen.UF.Curve.Arc()arc_coords.Radius = 1.0arc_coords.ArcCenter = [1.0, 1.0, 0.0]arc_coords.StartAngle = 0.0arc_coords.EndAngle = math.piarc_coords.MatrixTag = theSession.Parts.Display.WCS.CoordinateSystem.Orientation.Tagarc_tag = theUFSession.Curve.CreateArc( arc_coords)# Get the Arc Object to use with NX Open nxArc = NXOpen.TaggedObjectManager.GetTaggedObject(arc_tag)# Get the Arc parameters using NX Open APIsstart_angle = nxArc.StartAngle end_angle = nxArc.EndAngle arc_center = nxArc.CenterPoint 参考资料包装类官方文档]]></content>
+      <categories>
+        <category>NX二次开发</category>
+      </categories>
+      <tags>
+        <tag>NX二次开发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[NXOpen应用程序目录结构]]></title>
+    <url>%2F2017%2F08%2F03%2FNXOpen%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%2F</url>
+    <content type="text"><![CDATA[对于环境变量指定的任何根目录，NX寻找以下五个子目录：startup, application, udo, udf, and dfa。 注意：子目录下的文件名不能跟根目录下任何目录名相同(包含根目录下的所有子目录，不管层级)。否则程序执行会报错。 每个子目录使用说明如下： 子目录 使用 startup 放置自定义菜单文件、对话框和可执行文件。通常用于一般功能的应用程序 application 放置与NX菜单关联的自定义菜单项和可执行文件 udo 放置NX初始化时用于管理自定义对象所注册的方法 dfa 放置与该应用程序关联的类、函数和方法的KF ASCII定义文件。此目录不显示在DFA管理器或KF首选项中 udf 用户的自定义特性 有关使用环境变量和客户默认配置KF应用程序的信息。请参见知识融合在线帮助中的默认值和变量概述。 当启动NX时，它会自动加载startup和udo目录下的库和菜单文件。当NX加载每个共享库时，它立即执行标准入口点（参见入口点）。然后应用程序可以初始化任何事件。 为了让NX更快地启动，可以将程序放在application目录中，而不是startup目录。当您选择此策略时，当用户选择关联菜单按钮时，NX加载库，而不是在启动时加载。这个策略不能用于管理UDO。UDO程序必须放在startup，以确保NX能加载到事件。 包含在这些子目录的动态加载共享库必须包含操作系统的正确文件扩展名。如果没有使用正确的扩展，则NX将无法找到目标文件。NX将显示一个错误，指出应用程序没有被正确注册。 参考资料NXopen应用程序目录结构]]></content>
+      <categories>
+        <category>NX二次开发</category>
+      </categories>
+      <tags>
+        <tag>NX二次开发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[NX新建工具条]]></title>
+    <url>%2F2017%2F08%2F01%2FNX%E6%96%B0%E5%BB%BA%E5%B7%A5%E5%85%B7%E6%9D%A1%2F</url>
+    <content type="text"><![CDATA[NX工具条包括经典工具条和新版本的功能区。两种对应于不同的文件。经典工具条是以.tbr结尾的文件，功能区为.rtb结尾。 工具条文件需放在应用程序startup文件夹，以确保NX启动时能找到该文件。整个应用要想被NX找到需配置环境变量UGII_USER_DIR=&lt;根路径&gt;。或在&lt;NX安装目录&gt;\UGII\menus\custom_dirs.dat文件中配置根路径。 经典工具条1234567891011121314TITLE 金旅二次开发工具VERSION 160DOCK TOP BUTTON MENU1 BUTTON MENU2 BUTTON MENU3 SEPARATOR BUTTON MENU21 BUTTON MENU22 SEPARATOR BUTTON TC1 SEPARATOR BUTTON DRAFT1 效果如下： TITLE顾名思义为标题 VERSION，版本 DOCK，工具栏的停靠位置。可去TOP、BOTTOM、LEFT、RIGHT等 BUTTON后为men文件中定义的菜单项名称。如果菜单项有定义图标，则显示图标。否则显示菜单项文字。 SEPARATOR，分割线 新版本功能区1234567891011121314151617181920212223242526272829TITLE 金旅二次开发工具VERSION 170BEGIN_GROUP JL_MAIN1LABEL 金旅二次开发工具 BUTTON MENU1 BUTTON MENU2 BUTTON MENU3END_GROUPBEGIN_GROUP JL_MAIN2LABEL 自动指引 BUTTON MENU21 RIBBON_STYLE ALWAYS_SMALL_IMAGE_AND_TEXT BUTTON MENU22 RIBBON_STYLE ALWAYS_SMALL_IMAGE_AND_TEXTEND_GROUPBEGIN_GROUP JL_TCLABEL TC相关 BUTTON TC1 RIBBON_STYLE ALWAYS_SMALL_IMAGE_AND_TEXTEND_GROUPBEGIN_GROUP JL_DRAFTLABEL 制图相关 BUTTON DRAFT1 RIBBON_STYLE ALWAYS_SMALL_IMAGE_AND_TEXTEND_GROUP 效果如下： TITLE，标题 VERSION，版本 BEGIN_GROUP，END_GROUP定义一个组。如上图有”金旅二次开发工具”、”自动指引”、”TC相关”、”制图相关”四个组。 LABEL，组名称 BUTTON，men文件中菜单项的名称 RIBBON_STYLE，按钮的样式 参考资料细节请参考菜单及工具条]]></content>
+      <categories>
+        <category>NX二次开发</category>
+      </categories>
+      <tags>
+        <tag>NX二次开发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[NX新建菜单栏]]></title>
+    <url>%2F2017%2F07%2F30%2FNX%E6%96%B0%E5%BB%BA%E8%8F%9C%E5%8D%95%E6%A0%8F%2F</url>
+    <content type="text"><![CDATA[Menuscript语言可将新菜单项添加到NX。Menuscript命令存在于.men后缀结尾的文件中。无论使用哪种语言，菜单文件都是相同的。 要添加一个新的菜单项，以下描述菜单文件的基本命令：1234567VERSION 120 EDIT UG_GATEWAY_MAIN_MENUBAR MENU &lt;独一无二的文本，用于识别现有的或新的菜单&gt; &lt;菜单项1&gt; &lt;菜单项2&gt; &lt;...&gt; END_OF_MENU 每个菜单项可以通过下面的命令定义：12345BUTTON &lt;所有菜单项独一无二的文本&gt; LABEL &lt;菜单展示的文本&gt; MESSAGE &lt;鼠标放在按钮上弹出的提示&gt;BITMAP &lt;按钮图标名称&gt;ACTIONS &lt;程序的名称&gt; 任何程序都可以链接到菜单文件中的一个按钮。可以是与NX无关的浏览器，或是传统的NX程序。men文件一定要放在startup目录下 运行与NX无关的程序下面简单的men文件在打开菜单后面注册一个按钮，通过IE访问西门子官网。1234567VERSION 120 EDIT UG_GATEWAY_MAIN_MENUBAR AFTER UG_FILE_OPEN BUTTON SAMPLE_GO_TO_SIEMENS LABEL Go to Siemens.com ACTIONS &quot;start iexplore http://www.siemens.com&quot; END_OF_AFTER 运行与CommonAPI程序如果想从按钮运行一个通用的API程序，必须要把编译后的程序放置在application目录下。在men文件中的ACTIONS后加上文件名。对于C、C++、C#或VB程序，不需带后缀。对于java程序，需带后缀让NX知道是.class或.jar文件。12345678910111213141516171819202122232425VERSION 120EDIT UG_GATEWAY_MAIN_MENUBARAFTER UG_HELP CASCADE_BUTTON MY_MENU LABEL 二次开发工具END_OF_AFTERMENU MY_MENU BUTTON MENU1 LABEL 属性快捷填写 MESSAGE 快速填写属性 BITMAP properties_object ACTIONS FillInProperty.jar SEPARATOR BUTTON MENU2 LABEL 自动分层 MESSAGE 将显示的实体、草图、曲线点、基准、片体移动到指定层，2、3层对象忽略，除了1（有用实体）、2（有用片体）、3（有用控制曲线）层打开，其他隐藏 BITMAP layer_move_to ACTIONS Layout.classEND_OF_MENU 参考资料细节请参考菜单及工具条]]></content>
+      <categories>
+        <category>NX二次开发</category>
+      </categories>
+      <tags>
+        <tag>NX二次开发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[官方例子：怎样创建一个NXOpen程序]]></title>
+    <url>%2F2017%2F07%2F27%2F%E5%AE%98%E6%96%B9%E4%BE%8B%E5%AD%90%EF%BC%9A%E6%80%8E%E6%A0%B7%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AANXOpen%E7%A8%8B%E5%BA%8F%2F</url>
+    <content type="text"><![CDATA[你可以为许多不同的任务和函数创建一个NX打开的程序，比如在NX中操作的一个从命令行启动的函数，它可以被添加到菜单列表或其他NX命令结构中，或者是一个新对话框。 在这个例子中，我们创建一个对话框，选择面然后改变面颜色。 主要步骤如下:12345创建一个对话框从对话框中生成代码添加代码到生成的源文件中设置目录结构测试 在这个例子中，我们修改initialize(初始化)和apply(应用)回调函数。对于更复杂的对话框，你可以将代码添加到update(更新)回调函数来处理不断的变化。有关创建对话框的其他信息，参见UIStyler块介绍。有关使用静态API属性的信息，参见块属性的静态API 一、创建对话框1.打开NX 2.打开建模应用模块。可以通过打开一个零件或新建一个模型进入 3.搜索“块 UI 样式编辑器”进入UI编辑器(注意搜索要带空格) 4.在块目录组中，打开‘选择’目录。点击‘选择对象’，创建并显示“无标题”对话框 5.打开‘基本’目录，点击‘对象颜色拾取器’ 6.通过修改对话框中的属性来更改对话框标签。 在块选项卡，group块树中选择selection0。在属性选项卡，选择LabelString。双击修改为”选择面” 选择SelectMode，右击将值从Single改Multiple 在树列表中选择colorPicker0。在属性选项卡，选择Label。双击修改为”选择颜色” 在树列表中选择Group。在属性选项卡，选择Label。双击修改为”面” 在树列表中选择Dialog。在属性选项卡，选择Label。双击修改为”改变面的颜色” 二、从对话框生成代码1.在设计对话框选择”代码生成”块，右击”语言”，选择Java 2.右击”生成附注”，选择True 3.右击”特定于块的代码”，选择True 4.确保”用户出口”为True。 5.确保”更新”、”确定”、”显示的对话框”为True 6.选择保存(ctrl+s)，生成一个.dlx文件,一个.java文件 7.点击”退出块 UI 样式编辑器” 三、向生成代码中添加代码1.打开.java 文件 2.添加”添加以下代码”、”添加代码结束”中间代码1234567891011121314151617public void initialize() throws NXException, RemoteException&#123; try &#123; group0 = (nxopen.blockstyler.Group)theDialog.topBlock().findBlock(&quot;group0&quot;); selection0 = (nxopen.blockstyler.SelectObject)theDialog.topBlock().findBlock(&quot;selection0&quot;); colorPicker0 = (nxopen.blockstyler.ObjectColorPicker)theDialog.topBlock().findBlock(&quot;colorPicker0&quot;); //添加以下代码--------------- selection0.addFilter(nxopen.blockstyler.SelectObject.FilterType.FACES);//过滤器，只能选择面 //添加代码结束--------------- &#125; catch(Exception ex) &#123; //---- Enter your exception handling code here ----- theUI.nxmessageBox().show(&quot;Block Styler&quot;, nxopen.NXMessageBox.DialogType.ERROR, ex.getMessage()); &#125;&#125; 12345678910111213141516171819202122232425262728293031public int apply() throws NXException, RemoteException&#123; int errorCode = 0; try &#123; //---- Enter your callback code here ----- //添加以下代码--------------- //获取DisplayModification对象 TaggedObject[] selObjs = selection0.getSelectedObjects(); DisplayModification dispMod = theSession.displayManager().newDisplayModification(); //获取选择的颜色 int[] colors = colorPicker0.getValue(); dispMod.setNewColor(colors[0]); //获取选择的面 List&lt;DisplayableObject&gt; dispObjs = new ArrayList&lt;DisplayableObject&gt;(); for (TaggedObject taggedObject : selObjs) &#123; dispObjs.add((DisplayableObject) taggedObject); &#125; //应用 dispMod.apply((DisplayableObject[]) dispObjs.toArray()); dispMod.dispose(); //添加代码结束--------------- &#125; catch(Exception ex) &#123; //---- Enter your exception handling code here ----- errorCode = 1; theUI.nxmessageBox().show(&quot;Block Styler&quot;, nxopen.NXMessageBox.DialogType.ERROR, ex.getMessage()); &#125; return errorCode;&#125; 四、设置目录结构1.设置以下环境变量作为应用程序的根目录。 UGII_USER_DIR(或UGII_GROUP_DIR)=&lt;full directory path&gt; 注意：此环境变量仅适用于单个应用程序。有关为单个或多个应用程序设置根目录的附加信息，请参见环境变量。 2.在上面指定的根目录下创建应用程序的目录结构。请参见应用程序目录结构，看看如何设置目录结构以及NX如何在启动时加载自定义文件和应用程序。 3.复制.class、.dlx文件到上一步中创建的应用程序目录 五、测试1.打开模型应用模块(打开或新建一个模型) 2.点击 文件–执行–NXOpen。快捷键Ctrl+U。选择.class文件运行 六、实例文件对话框文件：changeFaceColor.dlx源码：changeFaceColor.java]]></content>
+      <categories>
+        <category>NX二次开发</category>
+      </categories>
+      <tags>
+        <tag>NX二次开发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[浅谈NX二次开发可用的开发工具包]]></title>
+    <url>%2F2017%2F07%2F24%2F%E6%B5%85%E8%B0%88NX%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91%E5%8F%AF%E7%94%A8%E7%9A%84%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E5%8C%85%2F</url>
+    <content type="text"><![CDATA[NX和其他西门子PLM软件产品提供了许多软件工具包。NXOpen是指提供直接与NX对象模型一起工作的过程API。每个API支持特定的编程语言。一组相对较新的语言都共享一个共同的对象模型，称为通用的API(Common API)。其他三种API已经存在多年，统称为遗留或经典API(Classic APIs)。 一、Common API这个NX架构向NX开发人员提供一个公共对象的特性和功能。使用这个公共对象模型，可以自动生成多语言绑定。这意味着来自通用api的所有语言都具有相同的对象集、对象属性和方法。此外，对于所有公共API，类层次结构是相同的。 这种体系结构比传统api使用的体系结构有许多优势。例如: 所有通用api语言在NX功能方面都是平等的。这意味着您可以自由地选择适合您特定需求的实现语言，而不必担心缺少的功能。 在NX中引入新的功能和自动化功能；交互方式和编程方式之间的功能不再延迟。 现在您可以访问NX开发人员使用的同一个对象模型。 通用api可以使用以下语言绑定： 1.NX Open for .NET - 这个API使用微软的.NET框架。这个API可以使用.NET兼容的语言创建任何自动化程序，包括Visual Basic .NET和C #。用户可以充分利用.NET框架提供的所有好处，包括本地Windows对话框开发工具和VisualStudio集成开发环境（IDE）的所有功能。如果Windows是你选择的平台，这个API是理想的。 2.NX Open for Java - 这个API使用甲骨文的java平台。java提供了许多好处，包括平台独立性和巨大的现有类库。java抽象窗口工具包（AWT）和Swing提供了工具构建平台无关的对话框。java远程方法调用（RMI）方法提供的工具来构建基于客户机/服务器应用程序。此外，还可以提供诸如Eclipse这样的免费开发环境。如果正在开发多个平台客户机/服务器应用程序，则此API是理想的。 3.NX Open for C++ - 这个API提供了NX的C++接口。这个新的C++库兼容Open C and Open C++ APIs。如果你需要提高现有的C / C++应用程序，这个API是理想的。 4.NX Open for Python - 这个API提供了一个NX的Python接口。Python是一种脚本语言，它使用现代编程范式，如面向对象编程和反射。它使用较简介的语法，并有一些用于科学和数值编程的扩展包。没有提供Python的远程API。 二、Journaling(录制功能)虽然Journaling不是一个工具包，在这里介绍是因为它可以用来记录自动化解决方案或使用大型应用程序生成代码。 Journaling是一种快速的自动化工具，记录、编辑和回放，交互式NX。它从通用API构建，在NX的交互式会话生成一个脚本文件，它可以在稍后时间重放。这些Journaling可以通过简单的编程结构和用户界面组件进行编辑和增强，以快速生成定制程序。 虽然日志重播目前仅限于# Python，C，Visual Basic .NET，用户可以选择记录在任何常用的API的语言。这种技术可以用来生成示例代码，然后可以在较大的应用程序中使用。 三、Classic APIs在NX采用通用api之前，开发了这三个api。这些API仍然可用，但不再对它们增强。 1.Open C - Open C API(ufunc)是NX的直接编程接口，它允许用户使用流行的C编程语言创建自定义应用程序。NX开发人员、客户和合作伙伴已经使用它来生成独特的应用程序来增强NX或充当完全独立的实用程序。Open C还提供了一个完全可扩展的数据模型，允许客户定义类似于标准NX对象的新类型的对象，并持久保存在NX部分文件中。Open C API已经发展了很多年，由5000多个函数组成。这些函数统称为用户函数。这个API通常被称为ufunc。开放的C函数通常有命名约定：UF__。例如，uf_modl_create_plane()。考虑到这个API的历史，它提供了广泛的功能。为了确保新的应用程序都可以访问这些功能.net，java，Python提供了包装器。 2.Open C++ - 这个API为NX提供了第一个面向对象的接口。用C++写的，这个API充分利用了面向对象的特征包括继承、封装和多态性。OpenC++提供完整的访问的类层次结构，使客户能够重写方法，派生自己的类，并创建全新NX的持久对象。OpenC++完全兼容Open C API。 3.NX Open GRIP - GRIP(图形交互编程)是一种用于自动化CAD/CAM任务的中间脚本语言。用户可以创建应用程序来实现数控操作，创建几何和绘图对象，控制系统参数，执行文件管理功能和修改现有的几何图形。 四、KF(Knowledge Fusion)Knowledge Fusion (KF) - 此API是嵌入在NX中的解释型、面向对象的语言。KF允许您通过创建规则，将工程知识添加到任务中，这些规则是语言的基本组成部分。语言是声明性的，而不是过程性的，这意味着规则在需要时执行，不管顺序如何。知识融合规则引擎根据规则之间的依赖关系确定正确的规则触发序列。此外，该语言还具有访问外部知识库（如数据库或电子表格）的能力，以及与其他应用程序（如分析和优化包）的接口。此API非常适合于需要参与模型更新的关联、持久对象的应用程序。有关更多信息，请参见知识融合和知识融合帮助和最佳实践。 五、其他的NX开发工具包除了上面提供的NX开放API工具包之外，西门子PLM软件还提供了以下的NX自动化工具。本文档将大致介绍NX开放的这些工具包。每个工具箱的完整信息可以在各自的用户指南中找到。 1.Block Styler (UI Styler) - 这是一个视觉用户界面生成器，可以交互设计的便携式NX风格对话框。它由NX开发人员在内部使用，外部由用户和第三方开发人员使用。这提供了一个运行在NX内的对话框生成器。由生成器产生的对话框定义文件是在运行NX会话期间自动加载，并提供程序处理用户交互的必要事件回调。更多信息见BlockStyler用户指南。 2.MenuScript - 此工具允许终端用户和第三方开发人员创建和编辑NX菜单。MenuScript是一个文本语言，可以用来自定义NX菜单项,用于从NX启动应用程序。菜单文件支持定制的主菜单栏和快速查看弹出菜单。标准的NX菜单可以定制,以满足特定的工作流程,可添加Block Styler创建对话框到新的菜单项。更多信息请查看菜单用户指南。 3.Open User Interface Styler (UI Styler) - UI Styler是可视化的用户界面生成器，用于维护Block Styler之前创建的基于UI Styler的对话框。新的对话框，应使用Block Styler.定义。更多信息见UI Styler用户指南。 六、其他的西门子PLM软件工具包西门子PLM软件提供了许多其他自动化和系统集成工具包。这里提到了两个工具包，因为它们与NX一起使用的频率比较高。这些工具包的使用超出了本手册的范围。有关更多信息，请参见它们各自的用户指南，它们不是NX帮助库的一部分。 1.Parasolid - Parasolid是世界领先的生产验证的几何建模软件，允许用户模拟行业最复杂的部件和组件。作为在不同计算机上的几何引擎的辅助设计、制造和工程（CAD/CAM/CAE）应用，Parasolid已在全球产品设计建立一个行业标准。Parasolid是用NX实体建模内核。 2.Teamcenter Engineering Integration Tool Kit (ITK) - 这个API提供用于定制Teamcenter支持组织的特定的数据管理功能和公用事业的需求。Teamcenter是客户端-服务器架构为基础的系统。可以对服务器和客户机部分进行定制。如果必须直接与Teamcenter自动化保存或检索产品数据通过NX和其他第三方应用程序生成过程中的应用，那么这个API是理想的。 参考资料官方例子链接：UFUN中文API 密码：pjc1链接：NXJavaAPI离线文档 密码：494sJava官方API 推荐网站nxjournaling]]></content>
+      <categories>
+        <category>NX二次开发</category>
+      </categories>
+      <tags>
+        <tag>NX二次开发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[NX二次开发Eclipse环境搭建]]></title>
+    <url>%2F2017%2F07%2F20%2FNX%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91Eclipse%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%2F</url>
+    <content type="text"><![CDATA[工欲善其事，必先利其器；本文章适用于使用Java进行NX二次开发。其他NXopen支持的语言请参考官方文档。 一、开发环境的搭建NXjar包存放目录：%NX安装目录%\NXBIN。NX提供的所有jar包，导入NXOpen开头的jar到JavaProject即可 二、调试环境的搭建使用Eclipse调试Java程序： 1.在NX中，选择 文件→执行 →替代Java参数 2.在替代Java参数对话框, UGII_JVM_OPTIONS 输入框中输入: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8888 (可选) 在 UGII_JVM_CLASSPATH 对话框中, 填入任意额外的Java classpath地址 3.你不需要在这里写入NXopen jar的classpath，因为他们会被NX自动加载 4.(可选) 在 UGII_JVM_LIBRARY_DIR 对话框, 写入你的64位Java的JVM地址。例如: %jre安装目录%\bin\server 5.点击 确定 6.在Eclipse Package Explorer，右键项目，Debug As →Debug Configurations 7.创建一个Remote Java Application，使用和上面相同的端口 8.你需要在NX上运行Java程序。Eclipse会在指定断点暂停 9.其他语言调试环境搭建敬请参见NX其他语言调试环境搭建 THE END.]]></content>
+      <categories>
+        <category>NX二次开发</category>
+      </categories>
+      <tags>
+        <tag>NX二次开发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Hello World]]></title>
+    <url>%2F2017%2F06%2F26%2Fhello-world%2F</url>
+    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
+  </entry>
+</search>
