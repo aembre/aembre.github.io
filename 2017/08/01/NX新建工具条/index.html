@@ -115,13 +115,13 @@
 <meta property="og:site_name" content="Aembr">
 <meta property="og:description" content="NX工具条包括经典工具条和新版本的功能区。两种对应于不同的文件。经典工具条是以.tbr结尾的文件，功能区为.rtb结尾。  工具条文件需放在应用程序startup文件夹，以确保NX启动时能找到该文件。整个应用要想被NX找到需配置环境变量UGII_USER_DIR=&amp;lt;根路径&amp;gt;。或在&amp;lt;NX安装目录&amp;gt;\UGII\menus\custom_dirs.dat文件中配置根路径。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/assets/photos/工具条1.jpg">
-<meta property="og:image" content="http://yoursite.com/assets/photos/工具条2.jpg">
-<meta property="og:updated_time" content="2018-10-23T05:45:45.783Z">
+<meta property="og:image" content="http://yoursite.com/images/工具条1.jpg">
+<meta property="og:image" content="http://yoursite.com/images/工具条2.jpg">
+<meta property="og:updated_time" content="2018-10-25T05:42:30.760Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NX新建工具条">
 <meta name="twitter:description" content="NX工具条包括经典工具条和新版本的功能区。两种对应于不同的文件。经典工具条是以.tbr结尾的文件，功能区为.rtb结尾。  工具条文件需放在应用程序startup文件夹，以确保NX启动时能找到该文件。整个应用要想被NX找到需配置环境变量UGII_USER_DIR=&amp;lt;根路径&amp;gt;。或在&amp;lt;NX安装目录&amp;gt;\UGII\menus\custom_dirs.dat文件中配置根路径。">
-<meta name="twitter:image" content="http://yoursite.com/assets/photos/工具条1.jpg">
+<meta name="twitter:image" content="http://yoursite.com/images/工具条1.jpg">
 
 
 
@@ -465,7 +465,7 @@
 </blockquote>
 <a id="more"></a>
 <h2 id="经典工具条"><a href="#经典工具条" class="headerlink" title="经典工具条"></a>经典工具条</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">TITLE 金旅二次开发工具</span><br><span class="line">VERSION 160</span><br><span class="line">DOCK TOP</span><br><span class="line"></span><br><span class="line">	BUTTON MENU1</span><br><span class="line">	BUTTON MENU2</span><br><span class="line">	BUTTON MENU3</span><br><span class="line">	SEPARATOR</span><br><span class="line">	BUTTON MENU21</span><br><span class="line">	BUTTON MENU22</span><br><span class="line">	SEPARATOR</span><br><span class="line">	BUTTON TC1</span><br><span class="line">	SEPARATOR</span><br><span class="line">	BUTTON DRAFT1</span><br></pre></td></tr></table></figure>
-<p>效果如下：<br><img src="/assets/photos/工具条1.jpg" alt="经典工具条"></p>
+<p>效果如下：<br><img src="/images/工具条1.jpg" alt="经典工具条"></p>
 <ul>
 <li>TITLE顾名思义为标题</li>
 <li>VERSION，版本</li>
@@ -474,7 +474,7 @@
 <li>SEPARATOR，分割线</li>
 </ul>
 <h2 id="新版本功能区"><a href="#新版本功能区" class="headerlink" title="新版本功能区"></a>新版本功能区</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">TITLE 金旅二次开发工具</span><br><span class="line">VERSION 170</span><br><span class="line"></span><br><span class="line">BEGIN_GROUP JL_MAIN1</span><br><span class="line">LABEL 金旅二次开发工具</span><br><span class="line">	BUTTON MENU1</span><br><span class="line">	BUTTON MENU2</span><br><span class="line">	BUTTON MENU3</span><br><span class="line">END_GROUP</span><br><span class="line"></span><br><span class="line">BEGIN_GROUP JL_MAIN2</span><br><span class="line">LABEL 自动指引</span><br><span class="line">	BUTTON MENU21</span><br><span class="line">	RIBBON_STYLE ALWAYS_SMALL_IMAGE_AND_TEXT</span><br><span class="line">	BUTTON MENU22</span><br><span class="line">	RIBBON_STYLE ALWAYS_SMALL_IMAGE_AND_TEXT</span><br><span class="line">END_GROUP</span><br><span class="line"></span><br><span class="line">BEGIN_GROUP JL_TC</span><br><span class="line">LABEL TC相关</span><br><span class="line">	BUTTON TC1</span><br><span class="line">	RIBBON_STYLE ALWAYS_SMALL_IMAGE_AND_TEXT</span><br><span class="line">END_GROUP</span><br><span class="line"></span><br><span class="line">BEGIN_GROUP JL_DRAFT</span><br><span class="line">LABEL 制图相关</span><br><span class="line">	BUTTON DRAFT1</span><br><span class="line">	RIBBON_STYLE ALWAYS_SMALL_IMAGE_AND_TEXT</span><br><span class="line">END_GROUP</span><br></pre></td></tr></table></figure>
-<p>效果如下：<br><img src="/assets/photos/工具条2.jpg" alt="功能区"></p>
+<p>效果如下：<br><img src="/images/工具条2.jpg" alt="功能区"></p>
 <ul>
 <li>TITLE，标题</li>
 <li>VERSION，版本</li>
