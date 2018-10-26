@@ -107,19 +107,19 @@
 
 
 
-<meta name="description" content="运行jar 方式1 1java -jar XXX.jar 特点：当前ssh窗口被锁定，按CTRL + C，或直接关闭窗口，程序退出。 那如何让窗口不锁定？  方式2 1java -jar XXX.jar &amp;amp;		#&amp;amp;代表在后台运行 特定：当前ssh窗口不被锁定，但是当窗口关闭时，程序中止运行。 继续改进，如何让窗口关闭时，程序仍然运行？  方式3 1nohup java -jar X">
+<meta name="description" content="本文主要阐述CentOS环境下如何运行以及停止jar">
 <meta name="keywords" content="Linux,java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux运行jar包">
 <meta property="og:url" content="http://yoursite.com/2017/09/27/Linux运行jar包/index.html">
 <meta property="og:site_name" content="Aembr">
-<meta property="og:description" content="运行jar 方式1 1java -jar XXX.jar 特点：当前ssh窗口被锁定，按CTRL + C，或直接关闭窗口，程序退出。 那如何让窗口不锁定？  方式2 1java -jar XXX.jar &amp;amp;		#&amp;amp;代表在后台运行 特定：当前ssh窗口不被锁定，但是当窗口关闭时，程序中止运行。 继续改进，如何让窗口关闭时，程序仍然运行？  方式3 1nohup java -jar X">
+<meta property="og:description" content="本文主要阐述CentOS环境下如何运行以及停止jar">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://images2017.cnblogs.com/blog/784082/201712/784082-20171229155624585-426275705.png">
-<meta property="og:updated_time" content="2018-10-26T03:55:28.568Z">
+<meta property="og:updated_time" content="2018-10-26T05:49:21.856Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux运行jar包">
-<meta name="twitter:description" content="运行jar 方式1 1java -jar XXX.jar 特点：当前ssh窗口被锁定，按CTRL + C，或直接关闭窗口，程序退出。 那如何让窗口不锁定？  方式2 1java -jar XXX.jar &amp;amp;		#&amp;amp;代表在后台运行 特定：当前ssh窗口不被锁定，但是当窗口关闭时，程序中止运行。 继续改进，如何让窗口关闭时，程序仍然运行？  方式3 1nohup java -jar X">
+<meta name="twitter:description" content="本文主要阐述CentOS环境下如何运行以及停止jar">
 <meta name="twitter:image" content="https://images2017.cnblogs.com/blog/784082/201712/784082-20171229155624585-426275705.png">
 
 
@@ -421,7 +421,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  398
+                  416
                 </span>
               
 
@@ -458,7 +458,11 @@
       
 
       
-        <h3 id="运行jar"><a href="#运行jar" class="headerlink" title="运行jar"></a>运行jar</h3><ul>
+        <blockquote>
+<p>本文主要阐述CentOS环境下如何运行以及停止jar</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="运行jar"><a href="#运行jar" class="headerlink" title="运行jar"></a>运行jar</h3><ul>
 <li><p>方式1</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar XXX.jar</span><br></pre></td></tr></table></figure>
 <p>特点：当前ssh窗口被锁定，按CTRL + C，或直接关闭窗口，程序退出。</p>

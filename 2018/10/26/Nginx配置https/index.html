@@ -107,18 +107,18 @@
 
 
 
-<meta name="description" content="添加ssl模块nginx配置https，需要添加ssl模块。 1234567891011121314#查看ngixn版本极其编译参数/usr/local/webserver/nginx/sbin/nginx -V#原先的config参数#configure arguments: --prefix=/usr/local/webserver/nginx --with-http_stub_status_">
+<meta name="description" content="今年7月起，Chrome浏览器的地址栏将把所有HTTP标示为不安全网站。HTTPS是HTTP协议的升级版本，更为安全可靠。互联网用户和网站之间的安全连接协议被视为减少用户风险的必要措施，否则用户可能遭受窃听、中间人攻击或数据篡改。因此网站配置HTTPS很有必要，下面针对nginx，谈一下配置HTTPS的步骤。">
 <meta name="keywords" content="Linux,Nginx">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nginx配置https">
 <meta property="og:url" content="http://yoursite.com/2018/10/26/Nginx配置https/index.html">
 <meta property="og:site_name" content="Aembr">
-<meta property="og:description" content="添加ssl模块nginx配置https，需要添加ssl模块。 1234567891011121314#查看ngixn版本极其编译参数/usr/local/webserver/nginx/sbin/nginx -V#原先的config参数#configure arguments: --prefix=/usr/local/webserver/nginx --with-http_stub_status_">
+<meta property="og:description" content="今年7月起，Chrome浏览器的地址栏将把所有HTTP标示为不安全网站。HTTPS是HTTP协议的升级版本，更为安全可靠。互联网用户和网站之间的安全连接协议被视为减少用户风险的必要措施，否则用户可能遭受窃听、中间人攻击或数据篡改。因此网站配置HTTPS很有必要，下面针对nginx，谈一下配置HTTPS的步骤。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-26T03:01:10.347Z">
+<meta property="og:updated_time" content="2018-10-26T05:45:54.571Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx配置https">
-<meta name="twitter:description" content="添加ssl模块nginx配置https，需要添加ssl模块。 1234567891011121314#查看ngixn版本极其编译参数/usr/local/webserver/nginx/sbin/nginx -V#原先的config参数#configure arguments: --prefix=/usr/local/webserver/nginx --with-http_stub_status_">
+<meta name="twitter:description" content="今年7月起，Chrome浏览器的地址栏将把所有HTTP标示为不安全网站。HTTPS是HTTP协议的升级版本，更为安全可靠。互联网用户和网站之间的安全连接协议被视为减少用户风险的必要措施，否则用户可能遭受窃听、中间人攻击或数据篡改。因此网站配置HTTPS很有必要，下面针对nginx，谈一下配置HTTPS的步骤。">
 
 
 
@@ -419,7 +419,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  536
+                  655
                 </span>
               
 
@@ -456,8 +456,25 @@
       
 
       
-        <h3 id="添加ssl模块"><a href="#添加ssl模块" class="headerlink" title="添加ssl模块"></a>添加ssl模块</h3><p>nginx配置https，需要添加ssl模块。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#查看ngixn版本极其编译参数</span><br><span class="line">/usr/local/webserver/nginx/sbin/nginx -V</span><br><span class="line">#原先的config参数</span><br><span class="line">#configure arguments: --prefix=/usr/local/webserver/nginx --with-http_stub_status_module --with-pcre</span><br><span class="line">#如果存在--with-http_ssl_module说明已添加ssl模块。否则在原先参数的基础上添加--with-http_ssl_module</span><br><span class="line">./configure --prefix=/usr/local/webserver/nginx --with-http_stub_status_module --with-pcre --with-http_ssl_module</span><br><span class="line">#make编译,make后千万别make install，否则就覆盖安装了。make完之后在objs目录下就多了个nginx，这个就是新版本的程序了。 </span><br><span class="line">make</span><br><span class="line">#备份原有的nginx配置文件</span><br><span class="line">cp /usr/local/webserver/nginx/sbin/nginx  /usr/local/webserver/nginx/sbin/nginx.bak</span><br><span class="line">#将新生成的nginx程序覆盖原有的nginx（这个时候nginx要停止状态）</span><br><span class="line">cp objs/nginx /usr/local/webserver/nginx/sbin/nginx</span><br><span class="line">#测试新的nginx程序是否正确</span><br><span class="line">/usr/local/webserver/nginx/sbin/nginx -t</span><br></pre></td></tr></table></figure>
+        <blockquote>
+<p>今年7月起，Chrome浏览器的地址栏将把所有HTTP标示为不安全网站。HTTPS是HTTP协议的升级版本，更为安全可靠。互联网用户和网站之间的安全连接协议被视为减少用户风险的必要措施，否则用户可能遭受窃听、中间人攻击或数据篡改。因此网站配置HTTPS很有必要，下面针对nginx，谈一下配置HTTPS的步骤。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="添加ssl模块"><a href="#添加ssl模块" class="headerlink" title="添加ssl模块"></a>添加ssl模块</h3><p>nginx配置https，需要添加ssl模块。</p>
+<p>查看ngixn版本极其编译参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/webserver/nginx/sbin/nginx -V</span><br></pre></td></tr></table></figure>
+<p>原先的config参数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">configure arguments: --prefix=/usr/local/webserver/nginx --with-http_stub_status_module --with-pcre</span><br></pre></td></tr></table></figure>
+<p>如果存在–with-http_ssl_module说明已添加ssl模块。否则在原先参数的基础上添加–with-http_ssl_module</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/local/webserver/nginx --with-http_stub_status_module --with-pcre --with-http_ssl_module</span><br></pre></td></tr></table></figure>
+<p>make编译,make后千万别make install，否则就覆盖安装了。make完之后在objs目录下就多了个nginx，这个就是新版本的程序了。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make</span><br></pre></td></tr></table></figure>
+<p>备份原有的nginx配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /usr/local/webserver/nginx/sbin/nginx  /usr/local/webserver/nginx/sbin/nginx.bak</span><br></pre></td></tr></table></figure>
+<p>将新生成的nginx程序覆盖原有的nginx（这个时候nginx要停止状态）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp objs/nginx /usr/local/webserver/nginx/sbin/nginx</span><br></pre></td></tr></table></figure>
+<p>测试新的nginx程序是否正确</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/webserver/nginx/sbin/nginx -t</span><br></pre></td></tr></table></figure>
 <h3 id="Nginx-证书部署"><a href="#Nginx-证书部署" class="headerlink" title="Nginx 证书部署"></a>Nginx 证书部署</h3><ol>
 <li><h4 id="获取证书"><a href="#获取证书" class="headerlink" title="获取证书"></a>获取证书</h4><p>腾讯云或阿里云搜索证书，获取免费证书。下载，将nginx文件夹下的证书上传到服务器。以腾讯云为例，nginx文件夹包括SSL证书文件 1_<a href="http://www.domain.com_bundle.crt" target="_blank" rel="noopener">www.domain.com_bundle.crt</a> 和私钥文件 2_<a href="http://www.domain.com.key。" target="_blank" rel="noopener">www.domain.com.key。</a></p>
 </li>
@@ -468,9 +485,9 @@
 <p>正确无误的话，重启nginx：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/webserver/nginx/sbin/nginx -s reload</span><br></pre></td></tr></table></figure>
 </li>
-<li><h4 id="使用全站加密，http自动跳转https（可选）"><a href="#使用全站加密，http自动跳转https（可选）" class="headerlink" title="使用全站加密，http自动跳转https（可选）"></a>使用全站加密，http自动跳转https（可选）</h4></li>
+<li><h4 id="使用全站加密，http自动跳转https（可选）"><a href="#使用全站加密，http自动跳转https（可选）" class="headerlink" title="使用全站加密，http自动跳转https（可选）"></a>使用全站加密，http自动跳转https（可选）</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  www.domain.com;				#你的域名</span><br><span class="line">        rewrite ^(.*) https://$host$1 permanent;	#转发http请求到https</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  www.domain.com;				#你的域名</span><br><span class="line">        rewrite ^(.*) https://$host$1 permanent;	#转发http请求到https</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
