@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-10-25T08:28:52.369Z</updated>
+  <updated>2018-10-26T03:01:10.347Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Nginx配置https</title>
+    <link href="http://yoursite.com/2018/10/26/Nginx%E9%85%8D%E7%BD%AEhttps/"/>
+    <id>http://yoursite.com/2018/10/26/Nginx配置https/</id>
+    <published>2018-10-26T02:36:30.000Z</published>
+    <updated>2018-10-26T03:01:10.347Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="添加ssl模块"><a href="#添加ssl模块" class="headerlink" title="添加ssl模块"></a>添加ssl模块</h3><p>nginx配置https，需要添加ssl模块。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#查看ngixn版本极其编译参数</span><br><span class="line">/usr/local/webserver/nginx/sbin/nginx -V</span><br><span class="line">#原先的config参数</span><br><span class="line">#configure arguments: --prefix=/usr/local/webserver/nginx --with-http_stub_status_module --with-pcre</span><br><span class="line">#如果存在--with-http_ssl_module说明已添加ssl模块。否则在原先参数的基础上添加--with-http_ssl_module</span><br><span class="line">./configure --prefix=/usr/local/webserver/nginx --with-http_stub_status_module --with-pcre --with-http_ssl_module</span><br><span class="line">#make编译,make后千万别make install，否则就覆盖安装了。make完之后在objs目录下就多了个nginx，这个就是新版本的程序了。 </span><br><span class="line">make</span><br><span class="line">#备份原有的nginx配置文件</span><br><span class="line">cp /usr/local/webserver/nginx/sbin/nginx  /usr/local/webserver/nginx/sbin/nginx.bak</span><br><span class="line">#将新生成的nginx程序覆盖原有的nginx（这个时候nginx要停止状态）</span><br><span class="line">cp objs/nginx /usr/local/webserver/nginx/sbin/nginx</span><br><span class="line">#测试新的nginx程序是否正确</span><br><span class="line">/usr/local/webserver/nginx/sbin/nginx -t</span><br></pre></td></tr></table></figure><h3 id="Nginx-证书部署"><a href="#Nginx-证书部署" class="headerlink" title="Nginx 证书部署"></a>Nginx 证书部署</h3><ol><li><h4 id="获取证书"><a href="#获取证书" class="headerlink" title="获取证书"></a>获取证书</h4><p>腾讯云或阿里云搜索证书，获取免费证书。下载，将nginx文件夹下的证书上传到服务器。以腾讯云为例，nginx文件夹包括SSL证书文件 1_<a href="http://www.domain.com_bundle.crt" target="_blank" rel="noopener">www.domain.com_bundle.crt</a> 和私钥文件 2_<a href="http://www.domain.com.key。" target="_blank" rel="noopener">www.domain.com.key。</a></p></li><li><h4 id="证书配置"><a href="#证书配置" class="headerlink" title="证书配置"></a>证书配置</h4><p>将域名 <a href="http://www.domain.com" target="_blank" rel="noopener">www.domain.com</a> 的证书文件1_<a href="http://www.domain.com_bundle.crt" target="_blank" rel="noopener">www.domain.com_bundle.crt</a> 、私钥文件2_<a href="http://www.domain.com.key保存到同一个目录，例如/usr/local/webserver/nginx/key目录下。" target="_blank" rel="noopener">www.domain.com.key保存到同一个目录，例如/usr/local/webserver/nginx/key目录下。</a><br>更新Nginx配置 文件如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen 443 ssl;   #指定ssl监听端口</span><br><span class="line">        server_name  www.domain.xyz;</span><br><span class="line">        ssl_certificate      /usr/local/webserver/nginx/key/1_www.domain.com_bundle.crt;    #指定服务器证书路径</span><br><span class="line">        ssl_certificate_key  /usr/local/webserver/nginx/key/2_www.domain.com.key;   #指定私钥证书路径</span><br><span class="line"></span><br><span class="line">        ssl_session_timeout  5m;</span><br><span class="line">        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;     #指定SSL服务器端支持的协议版本</span><br><span class="line">        ssl_ciphers  ECDHE-RSA-AES128-GCM-SHA256:HIGH:!aNULL:!MD5:!RC4:!DHE;    #指定加密算法</span><br><span class="line">        ssl_prefer_server_ciphers   on;    #在使用SSLv3和TLS协议时指定服务器的加密算法要优先于客户端的加密算法</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">            root   html;</span><br><span class="line">            index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure><p>查看配置是否正确：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/webserver/nginx/sbin/nginx -t</span><br></pre></td></tr></table></figure><p>正确无误的话，重启nginx：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/webserver/nginx/sbin/nginx -s reload</span><br></pre></td></tr></table></figure></li><li><h4 id="使用全站加密，http自动跳转https（可选）"><a href="#使用全站加密，http自动跳转https（可选）" class="headerlink" title="使用全站加密，http自动跳转https（可选）"></a>使用全站加密，http自动跳转https（可选）</h4></li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  www.domain.com;#你的域名</span><br><span class="line">        rewrite ^(.*) https://$host$1 permanent;#转发http请求到https</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;添加ssl模块&quot;&gt;&lt;a href=&quot;#添加ssl模块&quot; class=&quot;headerlink&quot; title=&quot;添加ssl模块&quot;&gt;&lt;/a&gt;添加ssl模块&lt;/h3&gt;&lt;p&gt;nginx配置https，需要添加ssl模块。&lt;/p&gt;
+&lt;figure class=&quot;highlig
+      
+    
+    </summary>
+    
+      <category term="服务器" scheme="http://yoursite.com/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+      <category term="Nginx" scheme="http://yoursite.com/tags/Nginx/"/>
+    
+  </entry>
   
   <entry>
     <title>云服务器安装Hexo博客</title>
@@ -180,6 +208,62 @@
       <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
     
       <category term="Nginx" scheme="http://yoursite.com/tags/Nginx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux运行jar包</title>
+    <link href="http://yoursite.com/2017/09/27/Linux%E8%BF%90%E8%A1%8Cjar%E5%8C%85/"/>
+    <id>http://yoursite.com/2017/09/27/Linux运行jar包/</id>
+    <published>2017-09-27T03:17:21.000Z</published>
+    <updated>2018-10-26T03:55:28.568Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="运行jar"><a href="#运行jar" class="headerlink" title="运行jar"></a>运行jar</h3><ul><li><p>方式1</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar XXX.jar</span><br></pre></td></tr></table></figure><p>特点：当前ssh窗口被锁定，按CTRL + C，或直接关闭窗口，程序退出。</p><p>那如何让窗口不锁定？</p></li><li><p>方式2</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar XXX.jar &amp;#&amp;代表在后台运行</span><br></pre></td></tr></table></figure><p>特定：当前ssh窗口不被锁定，但是当窗口关闭时，程序中止运行。</p><p>继续改进，如何让窗口关闭时，程序仍然运行？</p></li><li><p>方式3</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup java -jar XXX.jar &amp;</span><br></pre></td></tr></table></figure><p>nohup 意思是不挂断运行命令,当账户退出或终端关闭时,程序仍然运行。</p><p>当用 nohup 命令执行作业时，缺省情况下该作业的所有输出被重定向到nohup.out的文件中，除非另外指定了输出文件。</p></li><li><p>方式4</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup java -jar XXX.jar &gt;temp.txt &amp;</span><br></pre></td></tr></table></figure><p>自定义输出文件。</p></li></ul><h3 id="停止jar"><a href="#停止jar" class="headerlink" title="停止jar"></a>停止jar</h3><ul><li><p>方式1</p><p>查看所有后台执行的作业，每个作业前面都有个编号。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jobs</span><br></pre></td></tr></table></figure><p><code>fg+编号</code>，将某个作业调回前台控制，Ctrl+c中断程序运行或者使用以下命令。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill %num#num为编号</span><br></pre></td></tr></table></figure></li><li><p>方式2</p><p>查看与java相关的进程</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -ef | grep java</span><br></pre></td></tr></table></figure><p><img src="https://images2017.cnblogs.com/blog/784082/201712/784082-20171229155624585-426275705.png" alt="img"></p><p>每一行从前往后依次显示：UID PID PPID C STIME TTY TIME CMD<br>各相关信息的意义：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">UID： 程序被该 UID 所拥有</span><br><span class="line">PID ：就是这个程序的 ID</span><br><span class="line">PPID ：则是其上级父程序的ID</span><br><span class="line">C： CPU 使用的资源百分比</span><br><span class="line">STIME ：系统启动时间</span><br><span class="line">TTY： 登入者的终端机位置</span><br><span class="line">TIME： 使用掉的CPU时间</span><br><span class="line">CMD ：下达的指令</span><br></pre></td></tr></table></figure><p>使用kill命令停止进程</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill &lt;pid&gt;#pid为进程对应的pid</span><br></pre></td></tr></table></figure></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;运行jar&quot;&gt;&lt;a href=&quot;#运行jar&quot; class=&quot;headerlink&quot; title=&quot;运行jar&quot;&gt;&lt;/a&gt;运行jar&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;方式1&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;t
+      
+    
+    </summary>
+    
+      <category term="服务器" scheme="http://yoursite.com/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+      <category term="java" scheme="http://yoursite.com/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS安装jre</title>
+    <link href="http://yoursite.com/2017/09/26/CentOS%E5%AE%89%E8%A3%85jre/"/>
+    <id>http://yoursite.com/2017/09/26/CentOS安装jre/</id>
+    <published>2017-09-26T03:09:50.000Z</published>
+    <updated>2018-10-26T03:16:57.099Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="源码安装"><a href="#源码安装" class="headerlink" title="源码安装"></a>源码安装</h3><h4 id="创建文件夹"><a href="#创建文件夹" class="headerlink" title="创建文件夹"></a>创建文件夹</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /usr/java</span><br><span class="line">cd /usr/java</span><br></pre></td></tr></table></figure><h4 id="下载文件"><a href="#下载文件" class="headerlink" title="下载文件"></a>下载文件</h4><p>官网下载文件，通过ftp工具（如editplus，xftp等）上传的上面创建的文件夹中。</p><h4 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf jre名称</span><br></pre></td></tr></table></figure><h4 id="设置环境变量"><a href="#设置环境变量" class="headerlink" title="设置环境变量"></a>设置环境变量</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br></pre></td></tr></table></figure><p>在最后加入以下内容</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#set java environment</span><br><span class="line">JAVA_HOME=/usr/java/jre1.8.0_192</span><br><span class="line">PATH=$PATH:$JAVA_HOME/bin</span><br><span class="line">export JAVA_HOME PATH</span><br></pre></td></tr></table></figure><h4 id="让修改生效"><a href="#让修改生效" class="headerlink" title="让修改生效"></a>让修改生效</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure><h4 id="查看是否安装成功"><a href="#查看是否安装成功" class="headerlink" title="查看是否安装成功"></a>查看是否安装成功</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -version</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;源码安装&quot;&gt;&lt;a href=&quot;#源码安装&quot; class=&quot;headerlink&quot; title=&quot;源码安装&quot;&gt;&lt;/a&gt;源码安装&lt;/h3&gt;&lt;h4 id=&quot;创建文件夹&quot;&gt;&lt;a href=&quot;#创建文件夹&quot; class=&quot;headerlink&quot; title=&quot;创建文件夹&quot;&gt;
+      
+    
+    </summary>
+    
+      <category term="服务器" scheme="http://yoursite.com/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+      <category term="java" scheme="http://yoursite.com/tags/java/"/>
     
   </entry>
   
